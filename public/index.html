@@ -1,18 +1,421 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoMap — Geocoding Intelligence</title>
+  
+  <!-- Import Google Fonts: Plus Jakarta Sans (Utama) & Space Mono (Angka/Data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation Bar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 80px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+    }
+
+    .brand span {
+      color: #2563eb;
+    }
+
+    nav {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #64748b;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #0f172a;
+    }
+
+    .nav-btn {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 10px 22px;
+      border-radius: 99px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: opacity 0.2s;
+    }
+
+    .nav-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 40px 80px 80px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Ambient Glow Background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -20px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(37,99,235,0.1) 0%, rgba(248,250,252,0) 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .hero-left h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      margin-bottom: 20px;
+    }
+
+    .hero-left p {
+      font-size: 1.05rem;
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 480px;
+    }
+
+    /* Search Bar Input Pill Style */
+    .search-pill {
+      display: flex;
+      background: #ffffff;
+      padding: 6px 8px 6px 20px;
+      border-radius: 99px;
+      box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e2e8f0;
+      max-width: 460px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .search-pill input {
+      border: none;
+      outline: none;
+      background: transparent;
+      flex: 1;
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+
+    .search-pill button {
+      background: #0f172a;
+      color: #ffffff;
+      border: none;
+      padding: 12px 26px;
+      border-radius: 99px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .search-pill button:hover {
+      background: #1e293b;
+    }
+
+    .search-pill button:active {
+      transform: scale(0.97);
+    }
+
+    #loading {
+      display: none;
+      color: #2563eb;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      margin-bottom: 24px;
+    }
+
+    /* Right Section: Glassmorphism Floating Pass Card */
+    .hero-right {
+      display: flex;
+      justify-content: center;
+    }
+
+    .glass-card {
+      width: 100%;
+      max-width: 420px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 41, 59, 0.92) 100%);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 28px;
+      padding: 36px;
+      color: #ffffff;
+      box-shadow: 0 30px 60px -12px rgba(15, 23, 42, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .card-chip {
+      width: 40px;
+      height: 28px;
+      background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+      border-radius: 6px;
+      opacity: 0.85;
+    }
+
+    .card-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+
+    .card-main {
+      margin-bottom: 32px;
+    }
+
+    .card-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #94a3b8;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .card-value-large {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 24px;
+    }
+
+    .grid-item span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: block;
+      word-break: break-all;
+    }
+
+    /* Bottom Feature Highlights */
+    .features {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 80px 60px;
+      display: flex;
+      gap: 24px;
+    }
+
+    .feature-item {
+      flex: 1;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid #f1f5f9;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.03);
+    }
+
+    .feature-item label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #94a3b8;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .feature-item p {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    @media (max-width: 1024px) {
+      header, .hero, .features {
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .features {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <h3>Nama : coanna naufal rabbani  </h3>
-    <h3>NIM : 20250140154 </h3>
+  <!-- Navigation Bar -->
+  <header>
+    <div class="brand">geo<span>.map</span></div>
+    <nav>
+      <a href="#">Beranda</a>
+      <a href="#">Fitur</a>
+      <a href="#">API Docs</a>
+      <a href="#" class="nav-btn">Mulai Sekarang</a>
+    </nav>
+  </header>
 
-    <p>
-        kota :
-        <span id="lokasi"></span>
-    </p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-left">
+      <h1>Pencarian lokasi presisi tinggi, seperti yang Anda butuhkan.</h1>
+      <p>Dapatkan informasi wilayah administratif hingga koordinat geografis secara instan dan akurat menggunakan MapTiler API.</p>
+
+      <!-- Input Form Search Pill -->
+      <div class="search-pill">
+        <input type="text" id="inputLokasi" placeholder="Masukkan nama lokasi..." value="Bandung City" />
+        <button onclick="cariLokasi()">Cari Lokasi</button>
+      </div>
+
+      <div id="loading">Memuat data lokasi...</div>
+    </div>
+
+    <!-- Floating Glass Card (Reference UI Style) -->
+    <div class="hero-right">
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-chip"></div>
+          <span class="card-tag">MAPTILER API</span>
+        </div>
+
+        <div class="card-main">
+          <span class="card-label">Kecamatan / Wilayah</span>
+          <div class="card-value-large" id="kecamatan">-</div>
+        </div>
+
+        <div class="card-grid">
+          <div class="grid-item">
+            <span class="card-label">Negara</span>
+            <span id="negara">-</span>
+          </div>
+
+          <div class="grid-item">
+            <span class="card-label">Provinsi</span>
+            <span id="provinsi">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Coordinates Display Cards -->
+  <section class="features">
+    <div class="feature-item">
+      <label>Longitude</label>
+      <p id="longitude">-</p>
+    </div>
+    <div class="feature-item">
+      <label>Latitude</label>
+      <p id="latitude">-</p>
+    </div>
+    <div class="feature-item">
+      <label>Status Endpoint</label>
+      <p id="status">200 OK</p>
+    </div>
+  </section>
+
+  <script>
+    async function cariLokasi() {
+      const lokasi = document.getElementById("inputLokasi").value;
+      if (!lokasi) return alert("Silakan masukkan lokasi!");
+
+      document.getElementById("loading").style.display = "block";
+
+      try {
+        const response = await fetch(`/api/lokasi?query=${encodeURIComponent(lokasi)}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          document.getElementById("negara").innerText = data.negara || "-";
+          document.getElementById("provinsi").innerText = data.provinsi || "-";
+          document.getElementById("kecamatan").innerText = data.kecamatan || "-";
+          document.getElementById("longitude").innerText = data.longitude ?? "-";
+          document.getElementById("latitude").innerText = data.latitude ?? "-";
+          document.getElementById("status").innerText = "200 Active";
+        } else {
+          alert(data.message || "Gagal mendapatkan data lokasi.");
+          document.getElementById("status").innerText = "Error Fetching";
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Terjadi kesalahan pada server.");
+      } finally {
+        document.getElementById("loading").style.display = "none";
+      }
+    }
+
+    window.onload = cariLokasi;
+  </script>
+
 </body>
 </html>
