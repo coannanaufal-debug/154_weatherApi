@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GeoMap — Geocoding Intelligence</title>
   
-  <!-- Import Google Fonts: Plus Jakarta Sans (Utama) & Space Mono (Angka/Data) -->
+  <!-- Import Google Fonts: Plus Jakarta Sans & Space Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -46,44 +46,23 @@
       color: #2563eb;
     }
 
-    nav {
-      display: flex;
-      gap: 32px;
-      align-items: center;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #64748b;
-      font-size: 0.9rem;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-
-    nav a:hover {
-      color: #0f172a;
-    }
-
-    .nav-btn {
-      background-color: #0f172a;
-      color: #ffffff;
-      padding: 10px 22px;
+    /* Identity Badge pada Header */
+    .student-badge {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 8px 16px;
       border-radius: 99px;
-      font-weight: 600;
-      text-decoration: none;
       font-size: 0.85rem;
-      transition: opacity 0.2s;
-    }
-
-    .nav-btn:hover {
-      opacity: 0.9;
+      font-weight: 600;
+      color: #334155;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
     /* Hero Section */
     .hero {
       max-width: 1300px;
       margin: 0 auto;
-      padding: 40px 80px 80px;
+      padding: 20px 80px 60px;
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
       gap: 60px;
@@ -191,22 +170,11 @@
       overflow: hidden;
     }
 
-    .glass-card::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
 
     .card-chip {
@@ -225,8 +193,31 @@
       color: #94a3b8;
     }
 
+    /* Section Identitas Mahasiswa di Kartu */
+    .user-profile {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .user-profile .name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-transform: capitalize;
+    }
+
+    .user-profile .nim {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: #38bdf8;
+      margin-top: 4px;
+    }
+
     .card-main {
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
     .card-label {
@@ -239,7 +230,7 @@
     }
 
     .card-value-large {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: #ffffff;
       letter-spacing: -0.02em;
@@ -250,7 +241,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 20px;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 24px;
+      padding-top: 20px;
     }
 
     .grid-item span {
@@ -317,12 +308,9 @@
   <!-- Navigation Bar -->
   <header>
     <div class="brand">geo<span>.map</span></div>
-    <nav>
-      <a href="#">Beranda</a>
-      <a href="#">Fitur</a>
-      <a href="#">API Docs</a>
-      <a href="#" class="nav-btn">Mulai Sekarang</a>
-    </nav>
+    <div class="student-badge">
+      coanna naufal rabbani | 20250140154
+    </div>
   </header>
 
   <!-- Hero Section -->
@@ -340,12 +328,19 @@
       <div id="loading">Memuat data lokasi...</div>
     </div>
 
-    <!-- Floating Glass Card (Reference UI Style) -->
+    <!-- Floating Glass Card dengan Identitas Mahasiswa -->
     <div class="hero-right">
       <div class="glass-card">
         <div class="card-header">
           <div class="card-chip"></div>
           <span class="card-tag">MAPTILER API</span>
+        </div>
+
+        <!-- Identitas Nama & NIM -->
+        <div class="user-profile">
+          <div class="card-label">Identitas Pengembang</div>
+          <div class="name">coanna naufal rabbani</div>
+          <div class="nim">NIM: 20250140154</div>
         </div>
 
         <div class="card-main">
